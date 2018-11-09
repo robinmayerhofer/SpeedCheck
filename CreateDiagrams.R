@@ -1,5 +1,13 @@
+# you can start this script with: 'R < CreateDiagrams.R --no-save'
 require("parsedate")
 
+downloadMax <- 81920
+downloadDesired <- 40960
+
+uploadMax <- 15360
+uploadDesired <- 10240
+
+# write to file Diagrams.pdf that needs to be in the same folder as the R script
 pdf("Diagramme.pdf")
 
 data <- read.csv("SpeedMeasurements.csv", 
@@ -16,13 +24,19 @@ plot(x = data$Timestamp,
      type = "l",
      xlab = "",
      ylab = "Download Speed [kb/s]",
-     ylim = c(0, 81920),
+     ylim = c(0, downloadMax),
      main = "Download Speed",
      xaxt = "n",
-     panel.first = abline (h = seq(from = 10000, to = 80000, by = 10000), col = "LIGHTGREY")
+     # complex grids need to be done with ablines, as grid does not support customizing where exactly the lines are placed
+     # use panel.first to get the grid behind the data
+     panel.first = abline (h = seq(from = 10000, 
+                           to = round(downloadDesired, 
+                                      digits = -4), 
+                           by = 10000), 
+                           col = "LIGHTGREY")
      )
 
-abline(a = 40960, b= 0, col = "RED")
+abline(a = downloadDesired, b = 0, col = "RED")
 axis.POSIXct(side = 1,
              at = pretty(data$Timestamp, 20),
              format = "%d.%m.%y (%H:%M)",
@@ -33,13 +47,19 @@ plot(x = data$Timestamp,
      type = "l",
      xlab = "",
      ylab = "Upload Speed [kb/s]",
-     ylim = c(0, 15360),
+     ylim = c(0, uploadMax),
      main = "Upload Speed",
      xaxt = "n",
-     panel.first = abline (h = seq(from = 2000, to = 15000, by = 2000), col = "LIGHTGREY")
-)
+     panel.first = abline (h = seq(from = 2000, 
+                                   to = round(uploadDesired, 
+                                              digits = -3), 
+                                   by = 2000), 
+                                   col = "LIGHTGREY")
+    )
 
-abline(a = 10240, b= 0, col = "RED")
+abline(a = uploadDesired, b = 0, col = "RED")
+
+# make a pretty date/time axis with 20 labels 
 axis.POSIXct(side = 1,
              at = pretty(data$Timestamp, 20),
              format = "%d.%m.%y (%H:%M)",
