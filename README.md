@@ -41,7 +41,7 @@ If you have been successfully authenticated, you can create a directory in the G
 
 ```
 ./gdrive mkdir SpeedCheck
-./gdrive sync upload speedtest <ID>
+./gdrive sync upload SpeedCheck <ID>
 ```
 
 # 4. Setup the cronjob
